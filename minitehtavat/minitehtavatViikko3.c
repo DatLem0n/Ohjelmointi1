@@ -6,6 +6,10 @@ void tehtava7(void);
 void tehtava8(void);
 void tehtava9(void);
 void tehtava10(void);
+void tehtava11(void);
+void tehtava12(void);
+void tehtava13(void);
+void tehtava14(void);
 
 
 
@@ -15,7 +19,12 @@ int main (){
     //tehtava7();
     // tehtava8();
     //tehtava9();
-    tehtava10();
+    //tehtava10;
+    //tehtava11();
+    //tehtava12();
+    //tehtava13();
+    tehtava14();
+
 }
 
 
@@ -142,5 +151,65 @@ void tehtava9(){
 }
 
 void tehtava10(){
+    printf("N \t 10*N \t 100*N \t 1000*N \n");
+    for(int i = 1; i <= 10; i++){
+        printf("%i \t %i \t %i \t %i \n", i, i * 10, i * 100, i * 1000);
+    }
+}
 
+void tehtava11(){
+    long original, reversed = 0;
+    printf("Anna numero: ");
+    scanf("%li", &original);
+    long number = original;
+    if (original >= 10000 && original <= 99999){
+            while(number != 0)
+            {
+                int i = number % 10;
+                reversed = reversed * 10 + i;
+                number = number / 10;
+            }
+            if (original == reversed){
+                printf("Luku %li on palindromi", original);
+            }
+            else{
+                printf("Luku %li ei ole palindromi", original);
+            }
+        }
+    else {
+        printf("Syote ei ole viisinumeroinen positiivinen kokonaisluku");
+    }
+}
+
+void tehtava12(){
+    printf("%7s%12s", "Celsius", "Fahrenheit");
+    for (long asteC = -100; asteC <= 100; asteC += 10){
+        double asteF = 1.8 * asteC + 32;
+        printf("\n%5ld%12.02lf", asteC, asteF);
+    }
+}
+
+void tehtava13(){
+    for (int i = 1; i <= 8; i++){
+        int j = 0;
+        do{
+            printf("a");
+            j++;
+        }
+        while(j < i);
+        printf("\n");
+    }
+}
+
+void tehtava14(){
+    for(int i = 0; i < 8; i++){
+        int j = 8 - i;
+        for (int k = 0; k < j; k++){
+            printf(" ");
+        }
+        for (j; j <= 8; j++){
+            printf("a");
+        }
+        printf("\n");
+    }
 }
