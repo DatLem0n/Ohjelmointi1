@@ -16,8 +16,7 @@ void tehtava16(void);
 void tehtava17(void);
 
 
-
-int main (){
+int mainViikko3 (){
     //tehtava5();
     //tehtava6();
     //tehtava7();
@@ -31,7 +30,6 @@ int main (){
     //tehtava15();
     //tehtava16();
     tehtava17();
-
 }
 
 
