@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 void tehtava5(void);
 void tehtava6(void);
@@ -10,6 +11,9 @@ void tehtava11(void);
 void tehtava12(void);
 void tehtava13(void);
 void tehtava14(void);
+void tehtava15(void);
+void tehtava16(void);
+void tehtava17(void);
 
 
 
@@ -17,13 +21,16 @@ int main (){
     //tehtava5();
     //tehtava6();
     //tehtava7();
-    // tehtava8();
+    //tehtava8();
     //tehtava9();
     //tehtava10;
     //tehtava11();
     //tehtava12();
     //tehtava13();
-    tehtava14();
+    //tehtava14();
+    //tehtava15();
+    //tehtava16();
+    tehtava17();
 
 }
 
@@ -209,6 +216,75 @@ void tehtava14(){
         }
         for (j; j <= 8; j++){
             printf("a");
+        }
+        printf("\n");
+    }
+}
+
+void tehtava15(){
+    printf("Anna viisinumeroinen kokonaisluku: ");
+    char input[6];
+    scanf("%s", input);
+    printf("Luku %i eroteltuna: ", atoi(input));
+    if (input[0] == '-'){
+        for(int i = 1; i < sizeof(input) / sizeof(input[0]); i++){
+            printf("-%c ", input[i]);
+        }
+    }
+    else{
+        for(int i = 0; i < (sizeof(input) / sizeof(input[0]) - 1); i++){
+            printf("%c ", input[i]);
+        }
+    }
+}
+
+void tehtava16(){
+    double kokoKulutus = 0;
+    double kokoBensa = 0;
+    double kokoKm = 0;
+    double inputBensa;
+    double inputKm;
+    double tempKulutus;
+    int endFlag = 0;
+
+    do{
+        tempKulutus = 0;
+        inputBensa = 0;
+        inputKm = 0;
+        printf("Anna tankatun bensiinin maara ( -1 lopettaa ) > ");
+        scanf("%lf", &inputBensa);
+        if (inputBensa == -1){
+            endFlag = 1;
+        }
+        else{
+            kokoBensa += inputBensa;
+            printf("Ajetut kilometrit > ");
+            scanf("%lf", &inputKm);
+            kokoKm += inputKm;
+
+            tempKulutus = (inputBensa / inputKm) * 100;
+            printf("Keskikulutus talla tankkauksella on %.03lf litraa satasella\n", tempKulutus);
+        }
+    }
+    while (endFlag == 0);
+    kokoKulutus = (kokoBensa / kokoKm) * 100;
+    printf("kokonaiskeskikulutus on %.03lf litraa satasella", kokoKulutus);
+}
+
+void tehtava17(){
+    int printNum = 1;
+
+    for (int i = 1; i <= 10; i++) {
+        for (int j = 1; j <= 10 - i; j++) {
+            printf(" ");
+        }
+        for (int j = 1; j <= i; j++) {
+            printf("%d", printNum % 10);
+            printNum++;
+        }
+        for (int j = 1; j <= i - 1; j++) {
+            printf("%d", (printNum - 2 ) % 10);
+            printNum--;
         }
         printf("\n");
     }
