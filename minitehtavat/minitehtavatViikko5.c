@@ -1,5 +1,7 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
+#include <time.h>
 
 void tehtava22(void);
 void tehtava23(void);
@@ -7,6 +9,14 @@ void tehtava24(void);
 void tehtava26(void);
 void tehtava27(void);
 void tehtava28(void);
+void tehtava29(void);
+void tehtava30(void);
+void tehtava31(void);
+void tehtava32(void);
+void tehtava33(void);
+void tehtava34(void);
+void tehtava35(void);
+void tehtava36(void);
 
 int mainViikko5(){
     //tehtava22();
@@ -14,7 +24,15 @@ int mainViikko5(){
     //tehtava24();
     //tehtava26();
     //tehtava27();
-    tehtava28();
+    //tehtava28();
+    //tehtava29();
+    //tehtava30();
+    //tehtava31();
+    //tehtava32();
+    //tehtava33();
+    //tehtava34();
+    //tehtava35();
+    tehtava36();
 }
 
 void tehtava22(){
@@ -173,4 +191,284 @@ int onkoLukuTaydellinen(int luku){
         return 1;
     }
     else return 0;
+}
+int flipCoin(void);
+void tehtava29(){
+    srand(time(NULL));
+    int kruunua = 0, klaavaa = 0;
+
+    for (int i = 0; i < 100; ++i) {
+        if (flipCoin() == 1){
+            klaavaa ++;
+        }
+        else{
+            kruunua ++;
+        }
+    }
+
+    printf("Heittojen tulos: %i kruunua ja %i klaavaa", kruunua, klaavaa);
+}
+int flipCoin(){
+    double randomValue = (double)rand() / (RAND_MAX);
+    if(randomValue >= 0.50){
+        return 1;
+    }
+    else return 0;
+}
+
+
+void tehtava30(){
+    srand(time(NULL));
+    int randNum1, randNum2, answer, response;
+
+    do{
+        randNum1 = (rand() % 9) + 1;
+        randNum2 = (rand() % 9) + 1;
+        answer = randNum1 * randNum2;
+        printf("Anna luku -1 lopettaaksesi \n");
+        printf("Paljonko on %i kertaa %i? > ", randNum1, randNum2);
+
+        while(1){
+            scanf("%i", &response);
+
+            if(response == -1){
+                break;
+            }
+            else if(response == answer){
+                printf("Oikein! \n");
+                break;
+            }
+            else{
+                printf("Vaarin, yrita uudelleen > ");
+            }
+        }
+
+
+    }while(response != -1);
+}
+
+
+int random01(void);
+void tehtava31(){
+    srand(time(NULL));
+    int randNum1, randNum2, answer, response;
+
+    do {
+        if (random01() == 1){
+            randNum1 = (rand() % 9) + 1;
+            randNum2 = (rand() % 9) + 1;
+            answer = randNum1 * randNum2;
+            printf("Anna luku -1 lopettaaksesi \n");
+            printf("Paljonko on %i kertaa %i? > ", randNum1, randNum2);
+
+            while(1){
+                scanf("%i", &response);
+
+                if(response == -1){
+                    break;
+                }
+                else if(response == answer){
+                    printf("Oikein! \n");
+                    break;
+                }
+                else{
+                    printf("Vaarin, yrita uudelleen > ");
+                }
+            }
+        }
+        else{
+            randNum1 = (rand() % 9) + 1;
+            randNum2 = (rand() % 9) + 1;
+            answer = randNum1 * randNum2;
+            printf("Anna luku -1 lopettaaksesi \n");
+            printf("Paljonko on %i jaettuna %i? > ", answer, randNum1);
+
+            while(1){
+                scanf("%i", &response);
+
+                if(response == -1){
+                    break;
+                }
+                else if(response == randNum2){
+                    printf("Oikein! \n");
+                    break;
+                }
+                else{
+                    printf("Vaarin, yrita uudelleen > ");
+                }
+            }
+        }
+    }while(response != -1);
+}
+int random01(){
+    double randomValue = (double)rand() / (RAND_MAX);
+    if(randomValue >= 0.50){
+        return 1;
+    }
+    else return 0;
+}
+
+double factorial(int);
+void tehtava32(){
+    double num= 0;
+    for (int i = 0; i < 10; ++i) {
+        num += 1 / factorial(i);
+        printf("%lf \n", num);
+    }
+}
+double factorial(int number){
+    int num = 1;
+    for (int i = 1; i <= number ; ++i) {
+        num = num*i;
+    }
+    return num;
+}
+
+double pyoristaKokonaisluvuksi(double);
+double pyoristaKymmenesosat(double);
+double pyoristaSadasosat(double);
+double pyoristaTuhannesosat(double);
+void tehtava33(){
+    int amountOfValues = 1;
+    double arvot[amountOfValues];
+    for (int i = 0; i < amountOfValues; ++i) {
+        printf("Anna pyoristettava luku: ");
+        scanf("%lf", &arvot[i]);
+    }
+    for (int i = 0; i < amountOfValues; ++i) {
+        printf("%lf %lf \n", arvot[i], pyoristaKokonaisluvuksi(arvot[i]));
+        printf("%lf %lf \n", arvot[i], pyoristaKymmenesosat(arvot[i]));
+        printf("%lf %lf \n", arvot[i], pyoristaSadasosat(arvot[i]));
+        printf("%lf %lf \n", arvot[i], pyoristaTuhannesosat(arvot[i]));
+        printf("\n");
+    }
+}
+double pyoristaKokonaisluvuksi(double luku){
+    return floor(luku + 0.5);
+}
+double pyoristaKymmenesosat(double luku){
+    return floor(luku * 10 + 0.5) / 10;
+}
+double pyoristaSadasosat(double luku){
+    return floor(luku * 100 + 0.5) / 100;
+}
+double pyoristaTuhannesosat(double luku){
+    return floor(luku * 1000 + 0.5) / 1000;
+}
+
+
+void tehtava34(){
+    int flipped = 0, num, original;
+
+    printf("Anna kokonaisluku: ");
+    scanf("%i", &num);
+    original = num;
+
+    while (num != 0) {
+        flipped = flipped * 10 + num % 10;
+        num /= 10;
+    }
+    printf("Luku %i kaannettyna on %i", original, flipped);
+}
+
+
+void tehtava35(){
+    srand(time(NULL));
+    int randNum1, randNum2, answer, response, right = 0, wrong = 0;
+
+    do {
+        if (random01() == 1){
+            randNum1 = (rand() % 9) + 1;
+            randNum2 = (rand() % 9) + 1;
+            answer = randNum1 * randNum2;
+            printf("Anna luku -1 lopettaaksesi \n");
+            printf("Paljonko on %i kertaa %i? > ", randNum1, randNum2);
+
+            while(1){
+                scanf("%i", &response);
+
+                if(response == -1){
+                    break;
+                }
+                else if(response == answer){
+                    printf("Oikein! \n");
+                    right++;
+                    break;
+                }
+                else{
+                    printf("Vaarin, yrita uudelleen > ");
+                    wrong ++;
+                }
+            }
+        }
+        else{
+            randNum1 = (rand() % 9) + 1;
+            randNum2 = (rand() % 9) + 1;
+            answer = randNum1 * randNum2;
+            printf("Anna luku -1 lopettaaksesi \n");
+            printf("Paljonko on %i jaettuna %i? > ", answer, randNum1);
+
+            while(1){
+                scanf("%i", &response);
+
+                if(response == -1){
+                    break;
+                }
+                else if(response == randNum2){
+                    printf("Oikein! \n");
+                    right++;
+                    break;
+                }
+                else{
+                    printf("Vaarin, yrita uudelleen > ");
+                    wrong ++;
+                }
+            }
+        }
+    }while(response != -1);
+    printf("Sait %i vastausta oikein, ja %i meni pikkuisen pieleen \n", right, wrong);
+    if(right >= wrong){
+        printf("Arvosanasi on : \"Hyvaksytty\"");
+    }
+    else{
+        printf("Arvosanasi on : \"Hylatty\"");
+    }
+}
+
+int randomValue(int, int);
+void clearInputBuffer(void);
+void tehtava36(){
+    srand(time(NULL));
+    int random, input;
+    char inputChar;
+    do {
+        random = randomValue(1, 100);
+        while(1){
+            printf("Arvaa luku valilta 1 - 100: ");
+            scanf("%i", &input);
+            if (input < random){
+                printf("Liian pieni luku, yrita uudelleen. \n");
+            }
+            else if(input != random){
+                printf("Liian suuri luku, yrita uudelleen. \n");
+            }
+            else{
+                printf("OIKEIN! \n");
+                do {
+                    printf("Haluatko yrittaa uudelleen (vastaa k, jos haluat jatkaa ja e jos et halua jatkaa pelia)?");
+                    clearInputBuffer();
+                    scanf("%c", &inputChar);
+                }while(inputChar != 'e' && inputChar != 'k');
+                break;
+            }
+        }
+    }while(inputChar == 'k');
+
+}
+int randomValue(int min, int max){
+    return (rand() % max) + min;
+}
+void clearInputBuffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF) {}
 }
