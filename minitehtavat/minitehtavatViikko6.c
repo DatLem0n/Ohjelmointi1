@@ -21,10 +21,10 @@ int mainViikko6(){
     //tehtava41();
     //tehtava42();
     //tehtava43();
-    tehtava44();
+    //tehtava44();
     //tehtava45();
     //tehtava46();
-    //tehtava47();
+    tehtava47();
 }
 int paivienLukumaaraKuukaudessa(int);
 void tehtava37(){
@@ -252,3 +252,139 @@ int dateToDays(const int date[]){
     days += date[2];
     return days;
 }
+
+
+void tehtava45(){
+    int tyontekijaMaara = 5, rahayksMaara = 9, rahat[] = {500, 200, 100, 50,  20, 10, 5, 2, 1}, palkat[tyontekijaMaara];
+    int seteliMaara[tyontekijaMaara][rahayksMaara], seteliYhtMaara[rahayksMaara];
+
+    for (int i = 0; i < tyontekijaMaara; ++i) {
+        printf("Anna %i. tyontekijan palkka > ", i + 1);
+        scanf("%i", &palkat[i]);
+    }
+    for (int i = 0; i < tyontekijaMaara; ++i) {
+        int laskuPalkka = palkat[i];
+        for (int j = 0; j < rahayksMaara; ++j) {
+            if(laskuPalkka >= rahat[j]){
+                seteliMaara[i][j] = laskuPalkka / rahat[j];
+                laskuPalkka = laskuPalkka % rahat[j];
+            } else seteliMaara[i][j] = 0;
+        }
+    }
+    for (int i = 0; i < rahayksMaara; ++i) {
+        seteliYhtMaara[i] = 0;
+        for (int j = 0; j < tyontekijaMaara; ++j) {
+            seteliYhtMaara[i] += seteliMaara[j][i];
+        }
+    }
+    printf("Palkka \t");
+    for (int i = 0; i < rahayksMaara; ++i) {
+        printf("%3i € \t", rahat[i]);
+    }
+    printf("\n");
+    for (int i = 0; i < tyontekijaMaara; ++i) {
+        printf("%6i \t", palkat[i]);
+        for (int j = 0; j < rahayksMaara; ++j) {
+            printf("%3i \t", seteliMaara[i][j]);
+        }
+        printf("\n");
+    }
+    printf("  YHT: \t");
+    for (int i = 0; i < rahayksMaara; ++i) {
+        printf("%3i \t", seteliYhtMaara[i]);
+    }
+}
+
+
+int comparer(const void* a, const void* b) {
+    return (*(int *) a - *(int *) b);
+}
+void tehtava46(){
+    int syottoMaara, lottorivit[5][7], oikeaRivi[10];
+    srand(time(NULL));
+    do{
+        printf("Montako rivia haluat syottaa (max 5 rivia) > ");
+        scanf("%i", &syottoMaara);
+    } while (syottoMaara > 5 || syottoMaara < 0);
+
+    for (int i = 0; i < syottoMaara; ++i) {
+        for (int j = 0; j < 7; ++j) {
+            do {
+                printf("Anna %i rivin %i. numero > ", i + 1, j + 1);
+                scanf("%i", &lottorivit[i][j]);
+            }while(lottorivit[i][j] > 40 || lottorivit[i][j] < 1);
+        }
+    }
+    for (int i = syottoMaara; i < 5; ++i) {
+        for (int j = 0; j < 7; ++j) {
+            lottorivit[i][j] = (rand() % 40) + 1;
+        }
+    }
+
+    for (int i = 0; i < 5; ++i) {
+        qsort(lottorivit[i], 7 , sizeof(int), comparer);
+    }
+
+    for (int i = 0; i < 10; ++i) {
+        oikeaRivi[i] = (rand() % 40) + 1;
+    }
+
+    printf("Lottorivit: \n");
+    for (int i = 0; i < 5 ; ++i) {
+        for (int j = 0; j < 7; ++j) {
+            printf("%3i", lottorivit[i][j]);
+        }
+        printf("\n");
+    }
+    printf("Oikea rivi: \t");
+    for (int i = 0; i < 7; ++i) {
+        printf("%3i", oikeaRivi[i]);
+    }
+    printf("\t lisanumerot: %3i %3i %3i \n", oikeaRivi[7], oikeaRivi[8], oikeaRivi[9]);
+
+    int right = 0, extra = 0;
+    for (int i = 0; i < 5 ; ++i) {
+        for (int j = 0; j < 7; ++j) {
+            for (int k = 0; k < 10; ++k) {
+                if (lottorivit[i][j] == oikeaRivi[k]){
+                    if(k < 7) right++;
+                    else extra++;
+                }
+            }
+        }
+        printf("Rivilla %i. on %i oikein ja %i lisanumeroa \n", i + 1, right, extra);
+        right= 0; extra = 0;
+    }
+}
+
+void tehtava47(){
+    int juomaMaara = 4, arvostelijaMaara = 10, rajakynnys = 3, juomaPisteet[juomaMaara][arvostelijaMaara];
+
+    for (int i = 0; i < juomaMaara; ++i) {
+        printf("Anna juoma numero %i. pisteet \n", i + 1);
+        for (int j = 0; j < arvostelijaMaara; ++j) {
+            do {
+                printf("Anna arvosana (1-5)");
+                scanf("%i", &juomaPisteet[i][j]);
+                if(juomaPisteet[i][j] > 5 || juomaPisteet[i][j] < 1){
+                    printf("ARVOSANAN TULEE OLLA VALILTA 1 - 5 !\n");
+                }
+            } while (juomaPisteet[i][j] > 5 || juomaPisteet[i][j] < 1);
+        }
+    }
+
+
+    for (int i = 0; i < juomaMaara; ++i) {
+        int hyvaa = 0;
+        for (int j = 0; j < arvostelijaMaara; ++j) {
+            if(juomaPisteet[i][j] >= rajakynnys){
+                hyvaa ++;
+            }
+        }
+        if(hyvaa > arvostelijaMaara / 2){
+            printf("Juoma numero %i on kelvollista \n", i + 1);
+        }
+        else printf("Juoma numero %i on kelvotonta \n", i + 1);
+    }
+}
+
