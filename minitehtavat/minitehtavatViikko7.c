@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdlib.h>
+#include <time.h>
 
 
 
@@ -21,9 +23,9 @@ int mainViikko7(void){
     //tehtava51();
     //tehtava52();
     //tehtava53();
-    tehtava54();
+    //tehtava54();
     //tehtava55();
-    //tehtava56();
+    tehtava56();
 }
 
 void tehtava48(){
@@ -160,4 +162,105 @@ void tehtava54(){
     summa = luku1 + luku2;
 
     printf("Lukujen %i ja %i summa on %i", luku1, luku2, summa);
+}
+
+void tehtava55(){
+    char subst[5][100], verbs[5][100];
+    int randFormat = 0, inputMaara = 5, lausemaara;
+    srand(time(NULL));
+
+    for (int i = 0; i < inputMaara ; ++i) {
+        printf("Anna substantiivi (max 100 merkkia) > ");
+        fgets(subst[i], 100, stdin);
+        subst[i][strcspn(subst[i], "\n")] = 0;
+        printf("Anna verbi (max 100 merkkia > ");
+        fgets(verbs[i],100, stdin);
+        verbs[i][strcspn(verbs[i], "\n")] = 0;
+    }
+    printf("Montako puppulausetta generoidaan > ");
+    scanf("%i",&lausemaara);
+    printf("---Puppulauseet---\n");
+    for (int i = 0; i < inputMaara; ++i) {
+        randFormat = (rand() % 4) + 1;
+        switch (randFormat) {
+            case 1:{
+                printf("%s %s \n", subst[rand() % inputMaara], verbs[rand() % inputMaara]);
+            }
+            case 2:{
+                printf("%s %s ja  %s %s \n", subst[rand() % inputMaara], verbs[rand() % inputMaara], subst[rand() % inputMaara], verbs[rand() % inputMaara]);
+            }
+            case 3:{
+                printf("%s %s tai  %s %s \n", subst[rand() % inputMaara], verbs[rand() % inputMaara], subst[rand() % inputMaara], verbs[rand() % inputMaara]);
+            }
+            case 4:{
+                printf("Jos %s %s, niin  %s %s \n", subst[rand() % inputMaara], verbs[rand() % inputMaara], subst[rand() % inputMaara], verbs[rand() % inputMaara]);
+            }
+        }
+    }
+}
+
+void tehtava56() {
+    int num, remainder, digitsOfNum[4] = {0, 0, 0, 0}, kymmenFlag = 0;
+    char string[500], numerot[9][100] = {"yksi", "kaksi", "kolme", "nelja", "viisi", "kuusi", "seitseman", "kahdeksan", "yhdeksan"};
+    printf("Anna nelinumeroinen positiivinen kokonaisluku > ");
+    scanf("%i", &num);
+
+    for (int i = 0; i < 4; ++i) {
+        remainder = num % 10;
+        digitsOfNum[3 - i] = remainder;
+        num = num / 10;
+    }
+
+    for (int i = 0; i < 4; ++i) {
+        switch (4 - i) {
+            case 4:{
+                switch (digitsOfNum[i]) {
+                    case 0: break;
+                    case 1:{
+                        printf("tuhat");
+                    } break;
+                    default:{
+                        printf("%stuhatta", numerot[digitsOfNum[i] - 1]);
+                    } break;
+                }
+            } break;
+            case 3:{
+                switch (digitsOfNum[i]) {
+                    case 0: break;
+                    case 1:{
+                        printf("sata");
+                    } break;
+                    default:{
+                        printf("%ssataa", numerot[digitsOfNum[i]- 1]);
+                    } break;
+                } break;
+            }
+            case 2:{
+                switch (digitsOfNum[i]) {
+                    case 0: break;
+                    case 1:{
+                        kymmenFlag = 1;
+                    } break;
+                    default:{
+                        printf("%skymmenta", numerot[digitsOfNum[i]- 1]);
+                    } break;
+                } break;
+            }
+            case 1:{
+                if (digitsOfNum[i] != 0){
+                    if(kymmenFlag){
+                        printf("%stoista", numerot[digitsOfNum[i]- 1]);
+                    }
+                    else{
+                        printf("%s", numerot[digitsOfNum[i]- 1]);
+                    }
+                }
+                else{
+                    if(kymmenFlag) printf("kymmenen");
+                }
+
+            }break;
+            default: break;
+        }
+    }
 }
