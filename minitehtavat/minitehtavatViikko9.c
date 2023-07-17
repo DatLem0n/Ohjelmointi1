@@ -12,8 +12,8 @@ void tehtava62();
 int mainViikko9(void){
     //tehtava59();
     //tehtava60();
-    tehtava61();
-    //tehtava62();
+    //tehtava61();
+    tehtava62();
 }
 
 
@@ -398,7 +398,76 @@ int menu(int *selection) {
 }
 
 
-
 void flush(){
     while(getc(stdin) != '\n');
+}
+typedef struct{
+    char nimi[100];
+    double ajat[4];
+    double pisteet[4];
+    double yhtPisteet;
+
+}Kilpailija;
+int kilpailijaComparer(const void* a, const void* b);
+void tehtava62(){
+    int kilpailijaLkm = 0;
+    printf("Montako kilpailijaa? > ");
+    scanf("%i", &kilpailijaLkm);
+    flush();
+
+    Kilpailija kilpailijat[kilpailijaLkm];
+    for (int i = 0; i < kilpailijaLkm; ++i) {
+        printf("Anna kilpailijan nimi > ");
+        fgets(kilpailijat[i].nimi, 100, stdin);
+        kilpailijat[i].nimi[strcspn(kilpailijat[i].nimi, "\n")] = 0;
+
+        for (int j = 0; j < 4; ++j) {
+            char tempTime[100];
+            int min = 0, sec = 0;
+            double totalSec, ms = 0;
+            printf("Anna kilpailijan %i. aika > ", j + 1);
+            fgets(tempTime, 100, stdin);
+            sscanf(tempTime, "%d.%d.%lf", &min, &sec, &ms);
+            totalSec = sec + (min * 60) + (ms / 100);
+            kilpailijat[i].ajat[j] = totalSec;
+        }
+    }
+    for (int i = 0; i < kilpailijaLkm; ++i) {
+        kilpailijat[i].yhtPisteet = 0;
+        for (int j = 0; j < 4; ++j) {
+            switch (j) {
+                case 0:{
+                    kilpailijat[i].pisteet[j] = kilpailijat[i].ajat[j];
+                    kilpailijat[i].yhtPisteet += kilpailijat[i].pisteet[j];
+                }break;
+                case 1:{
+                    kilpailijat[i].pisteet[j] = kilpailijat[i].ajat[j] / 3;
+                    kilpailijat[i].yhtPisteet += kilpailijat[i].pisteet[j];
+                }break;
+                case 2:{
+                    kilpailijat[i].pisteet[j] = kilpailijat[i].ajat[j] / 10;
+                    kilpailijat[i].yhtPisteet += kilpailijat[i].pisteet[j];
+                }break;
+                case 3:{
+                    kilpailijat[i].pisteet[j] = kilpailijat[i].ajat[j] / 20;
+                    kilpailijat[i].yhtPisteet += kilpailijat[i].pisteet[j];
+                }break;
+            }
+        }
+    }
+    qsort(kilpailijat, kilpailijaLkm, sizeof (Kilpailija), kilpailijaComparer);
+    for (int i = 0; i < kilpailijaLkm; ++i) {
+        printf("%i. %s \t %.03lf \n", i + 1, kilpailijat[i].nimi, kilpailijat[i].yhtPisteet);
+    }
+
+}
+
+int kilpailijaComparer(const void* a, const void* b) {
+    const Kilpailija * kilpailija1 = (const Kilpailija *)a;
+    const Kilpailija * kilpailija2 = (const Kilpailija *)b;
+
+    int scoreA = kilpailija1->yhtPisteet;
+    int scoreB = kilpailija2->yhtPisteet;
+
+    return scoreA - scoreB;
 }
