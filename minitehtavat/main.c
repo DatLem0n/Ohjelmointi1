@@ -5,6 +5,7 @@ int mainViikko6(void);
 int mainViikko7(void);
 int mainViikko8(void);
 int mainViikko9(void);
+int mainViikko10(void);
 
 int main(){
     //mainViikko3();
@@ -13,5 +14,6 @@ int main(){
     //mainViikko6();
     //mainViikko7();
     //mainViikko8();
-    mainViikko9();
+    //mainViikko9();
+    mainViikko10();
 }
