@@ -30,14 +30,27 @@ void suljeIstunto(Kortti*);
 
 int main() {
     Kortti kortti;
-    int valinta;
+    int valinta, quitFlag = 0;
+    char input;
 
     while (1){
         puts("\nTervetuloa!\n");
-        puts("Syota kortti, ole hyva (kortteja 1, 2 tai 3) (-1 lopettaa)");
+        puts("Syota tilinumero, ole hyva (valmiita tileja 1, 2 ja 3) (Q lopettaa)");
 
-        valinta = kysyValinnat(1, 4);
-        if (valinta == -1){
+        while (1) {
+            if (scanf("%d", &valinta) != 1) {
+                scanf("%c", &input);
+                fflush(stdin);
+                if (input == 'q' || input == 'Q') {
+                    quitFlag = 1;
+                    break;
+                } else {
+                    printf("Vaara valinta, (valmiita tileja 1, 2 ja 3) (Q lopettaa)\n");
+                }
+            }
+            else break;
+        }
+        if (quitFlag){
             break;
         }
         if(lueKortti(valinta, &kortti)){
@@ -72,7 +85,7 @@ int lueKortti(int tiliNumero, Kortti* kortti){
         return 0;
     }
     kortti->tiliNumero = tiliNumero;
-    fgets(pin, 4, tiliFile);
+    fgets(pin, 10, tiliFile);
     kortti->pin = atoi(pin);
 
     if(kysyPin(kortti) == 0){
@@ -80,14 +93,12 @@ int lueKortti(int tiliNumero, Kortti* kortti){
     }
 
     fgets(saldo, 100, tiliFile);
-    kortti->saldo = atoi(saldo);
+    kortti->saldo = strtod(saldo, NULL);
     if(feof(tiliFile)){
         kortti->tapahtumaMaara = 0;
         kortti->kayttoraja = 400;
         return 1;
     }
-    fgets(saldo, 100, tiliFile);
-    kortti->saldo = strtod(saldo, NULL);
     fgets(kayttoraja, 100, tiliFile);
     kortti->kayttoraja = atoi(kayttoraja);
     fgets(tapahtumaMaara, 100, tiliFile);
@@ -106,6 +117,10 @@ int lueKortti(int tiliNumero, Kortti* kortti){
     return 1;
 }
 
+/**
+ * Tallentaa kortin tiedot tilinumero.tili tiedostoon.
+ * @param kortti Tili, jonka tiedot tallennetaan.
+ */
 void suljeIstunto(Kortti* kortti){
     FILE * tiliFile;
     char filename[100], tempStr[200];
@@ -115,11 +130,11 @@ void suljeIstunto(Kortti* kortti){
     tiliFile = fopen(filename, "w");
 
     fprintf(tiliFile,"%i\n", kortti->pin);
-    fprintf(tiliFile,"%lf\n", kortti->saldo);
+    fprintf(tiliFile,"%.02lf\n", kortti->saldo);
     fprintf(tiliFile,"%i\n", kortti->kayttoraja);
     fprintf(tiliFile,"%i\n", kortti->tapahtumaMaara);
     for (int i = 0; i < kortti->tapahtumaMaara; ++i) {
-        snprintf(tempStr, 200, "%s;%lf", kortti->tapahtumat[i].nimi, kortti->tapahtumat[i].summa);
+        snprintf(tempStr, 200, "%s;%.02lf\n", kortti->tapahtumat[i].nimi, kortti->tapahtumat[i].summa);
         fputs(tempStr, tiliFile);
     }
     fclose(tiliFile);
