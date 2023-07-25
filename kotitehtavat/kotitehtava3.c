@@ -35,7 +35,7 @@ int main(void) {
 }
 /**
  * Lukee valitun kortin tiedot muistiin
- * @param korttiValinta kortti, jonka tiedot luetaan (int)
+ * @param korttiValinta (int) kortin numero, jonka tiedot luetaan.
  */
 void lueKortti(int korttiValinta){
     printf("Luettu kortti %i \n", korttiValinta);

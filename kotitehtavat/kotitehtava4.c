@@ -51,7 +51,7 @@ int main() {
 }
 /**
  * Lukee valitun kortin tiedot muistiin
- * @param korttiValinta (int) kortti, jonka tiedot luetaan
+ * @param korttiValinta (int) kortin numero, jonka tiedot luetaan (1 - 3)
  * @param kortti (Kortti) kortti, jonne tiedot luetaan
  */
 void lueKortti(int korttiValinta, Kortti* kortti){

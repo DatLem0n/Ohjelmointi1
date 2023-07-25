@@ -7,5 +7,6 @@ add_executable(Ohjelmointi1 minitehtavat/minitehtavatViikko3.c minitehtavat/mini
 add_executable(Ohjelmointi1_KT3 kotitehtavat/kotitehtava3.c)
 add_executable(Ohjelmointi1_KT4 kotitehtavat/kotitehtava4.c)
 add_executable(Ohjelmointi1_KT5 kotitehtavat/kotitehtava5.c)
+add_executable(Ohjelmointi1_KT6 kotitehtavat/kotitehtava6.c)
 
 target_link_libraries(Ohjelmointi1 m)
