@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 
 typedef struct {
@@ -8,6 +9,7 @@ typedef struct {
 }Maksu;
 
 typedef struct {
+    int tiliNumero;
     double saldo;
     int kayttoraja;
     int pin;
@@ -15,13 +17,14 @@ typedef struct {
     int tapahtumaMaara;
 }Kortti;
 
-void lueKortti(int, Kortti*);
+int lueKortti(int, Kortti*);
 int kysyPin(Kortti*);
 int menu(Kortti*);
 int otto(Kortti*);
 void saldo(Kortti*);
 void tapahtumat(Kortti*);
 int kysyValinnat(int, int);
+void suljeIstunto(Kortti*);
 
 
 
@@ -31,75 +34,95 @@ int main() {
 
     while (1){
         puts("\nTervetuloa!\n");
-        puts("Syota kortti, ole hyva (kortteja 1, 2 tai 3) (4 lopettaa)");
+        puts("Syota kortti, ole hyva (kortteja 1, 2 tai 3) (-1 lopettaa)");
 
         valinta = kysyValinnat(1, 4);
-        if (valinta == 4){
+        if (valinta == -1){
             break;
         }
-        lueKortti(valinta, &kortti);
-
-        if(!kysyPin(&kortti)){
-            break;
-        }
-        while (1){
-            if (menu(&kortti) == 4) {
-                break;
+        if(lueKortti(valinta, &kortti)){
+            while (1){
+                if (menu(&kortti) == 4) {
+                    suljeIstunto(&kortti);
+                    break;
+                }
             }
         }
     }
 }
 /**
- * Lukee valitun kortin tiedot muistiin
- * @param korttiValinta (int) kortin numero, jonka tiedot luetaan (1 - 3)
+ * Lukee valitun kortin tiedot muistiin, kutsuu kysyPin funktion, jolla tarkistaa luvan lukea loput tilin tiedot.
+ * Tilin tiedot tulisi olla .tili päätteisessä tiedostossa riveittäin seuraavassa järjestyksessä:
+ * PIN(int) -> Saldo(double) -> Kortin käyttöraja(int) -> Tapahtumamäärä(int) -> Tapahtumat [nimi(str);summa(double)]
+ *
+ * @param tiliNumero (int) tilin numero, jonka tiedot luetaan (1 - 3)
  * @param kortti (Kortti) kortti, jonne tiedot luetaan
+ *
+ * @return palauttaa 1, jos lukeminen onnistuu, muuten 0
  */
-void lueKortti(int korttiValinta, Kortti* kortti){
-    switch (korttiValinta) {
-        case 1:{
-            kortti->saldo = 2.07;
-            kortti->kayttoraja = 50;
-            kortti->pin = 1111;
-            strcpy(kortti->tapahtumat[0].nimi, "Kela");
-            kortti->tapahtumat[0].summa = 268.23;
-            strcpy(kortti->tapahtumat[1].nimi, "vuokra");
-            kortti->tapahtumat[1].summa = -300;
-            strcpy(kortti->tapahtumat[2].nimi, "ruoka");
-            kortti->tapahtumat[2].summa = -20.06;
-            kortti->tapahtumaMaara = 3;
+int lueKortti(int tiliNumero, Kortti* kortti){
+    FILE * tiliFile;
+    char filename[100], pin[10], kayttoraja[100], saldo[100], tapahtumaMaara[10], tapahtumat[200];
+    snprintf(filename, 100, "%i", tiliNumero);
+    strcat(filename, ".tili");
 
-        }break;
-        case 2:{
-            kortti->saldo = 2000;
-            kortti->kayttoraja = 200;
-            kortti->pin = 2222;
-            strcpy(kortti->tapahtumat[0].nimi, "Kela");
-            kortti->tapahtumat[0].summa = 268.23;
-            strcpy(kortti->tapahtumat[1].nimi, "vuokra");
-            kortti->tapahtumat[1].summa = -100;
-            strcpy(kortti->tapahtumat[2].nimi, "ruoka");
-            kortti->tapahtumat[1].summa = -50;
-            strcpy(kortti->tapahtumat[3].nimi, "isimaksaa");
-            kortti->tapahtumat[3].summa = 400;
-            kortti->tapahtumaMaara = 4;
-        }break;
-        case 3:{
-            kortti->saldo = 10000.01;
-            kortti->kayttoraja = 400;
-            kortti->pin = 3333;
-            strcpy(kortti->tapahtumat[0].nimi, "Palkka");
-            kortti->tapahtumat[0].summa = 15802.95;
-            strcpy(kortti->tapahtumat[1].nimi, "verot");
-            kortti->tapahtumat[1].summa = -15802.94;
-            strcpy(kortti->tapahtumat[2].nimi, "ruoka");
-            kortti->tapahtumat[2].summa = -50;
-            strcpy(kortti->tapahtumat[3].nimi, "veron palautus");
-            kortti->tapahtumat[3].summa = 16;
-            kortti->tapahtumaMaara = 4;
-        }break;
-        default:
+    tiliFile = fopen(filename, "r");
+    if (tiliFile == NULL){
+        puts("Tilinumeroa ei tunnistettu \n");
+        return 0;
     }
-    printf("Luettu kortti %i \n", korttiValinta);
+    kortti->tiliNumero = tiliNumero;
+    fgets(pin, 4, tiliFile);
+    kortti->pin = atoi(pin);
+
+    if(kysyPin(kortti) == 0){
+        return 0;
+    }
+
+    fgets(saldo, 100, tiliFile);
+    kortti->saldo = atoi(saldo);
+    if(feof(tiliFile)){
+        kortti->tapahtumaMaara = 0;
+        kortti->kayttoraja = 400;
+        return 1;
+    }
+    fgets(saldo, 100, tiliFile);
+    kortti->saldo = strtod(saldo, NULL);
+    fgets(kayttoraja, 100, tiliFile);
+    kortti->kayttoraja = atoi(kayttoraja);
+    fgets(tapahtumaMaara, 100, tiliFile);
+    kortti->tapahtumaMaara = atoi(tapahtumaMaara);
+
+    char * tapahtumaToken;
+    for (int i = 0; i < kortti->tapahtumaMaara; ++i) {
+        fgets(tapahtumat, 200, tiliFile);
+
+        tapahtumaToken = strtok(tapahtumat, ";");
+        strcpy(kortti->tapahtumat[i].nimi, tapahtumaToken);
+        tapahtumaToken = strtok(NULL, ";");
+        kortti->tapahtumat[i].summa = strtod(tapahtumaToken, NULL);
+    }
+    fclose(tiliFile);
+    return 1;
+}
+
+void suljeIstunto(Kortti* kortti){
+    FILE * tiliFile;
+    char filename[100], tempStr[200];
+
+    snprintf(filename, 200, "%i", kortti->tiliNumero);
+    strcat(filename, ".tili");
+    tiliFile = fopen(filename, "w");
+
+    fprintf(tiliFile,"%i\n", kortti->pin);
+    fprintf(tiliFile,"%lf\n", kortti->saldo);
+    fprintf(tiliFile,"%i\n", kortti->kayttoraja);
+    fprintf(tiliFile,"%i\n", kortti->tapahtumaMaara);
+    for (int i = 0; i < kortti->tapahtumaMaara; ++i) {
+        snprintf(tempStr, 200, "%s;%lf", kortti->tapahtumat[i].nimi, kortti->tapahtumat[i].summa);
+        fputs(tempStr, tiliFile);
+    }
+    fclose(tiliFile);
 }
 
 /**
