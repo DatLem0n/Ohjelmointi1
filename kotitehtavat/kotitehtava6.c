@@ -45,7 +45,7 @@ int main() {
                     quitFlag = 1;
                     break;
                 } else {
-                    printf("Vaara valinta, (valmiita tileja 1, 2 ja 3) (Q lopettaa)\n");
+                    printf("Vain numeroita tilinumeroon, yrita uudelleen (valmiita tileja 1, 2 ja 3) (Q lopettaa)\n");
                 }
             }
             else break;
@@ -67,6 +67,7 @@ int main() {
  * Lukee valitun kortin tiedot muistiin, kutsuu kysyPin funktion, jolla tarkistaa luvan lukea loput tilin tiedot.
  * Tilin tiedot tulisi olla .tili päätteisessä tiedostossa riveittäin seuraavassa järjestyksessä:
  * PIN(int) -> Saldo(double) -> Kortin käyttöraja(int) -> Tapahtumamäärä(int) -> Tapahtumat [nimi(str);summa(double)]
+ * Jos tilin tiedostossa on vain PIN ja Saldo, funktio luo tilille loput.
  *
  * @param tiliNumero (int) tilin numero, jonka tiedot luetaan (1 - 3)
  * @param kortti (Kortti) kortti, jonne tiedot luetaan
@@ -89,6 +90,7 @@ int lueKortti(int tiliNumero, Kortti* kortti){
     kortti->pin = atoi(pin);
 
     if(kysyPin(kortti) == 0){
+        fclose(tiliFile);
         return 0;
     }
 
@@ -153,7 +155,7 @@ int kysyPin(Kortti* kortti){
         if(syotto == tunnusluku){
             return 1;
         }
-        else if(i != 3) printf("Vaara tunnusluku, yrita uudelleen (yritys %i) \n", i + 2);
+        else if(i != 3) printf("Vaara tunnusluku, yrita uudelleen (%i. yritys) \n", i + 2);
     }
     printf("Pin vaarin %i kertaa, ota yhteys pankkiin", sallitutKerrat);
     return 0;
@@ -250,7 +252,7 @@ int otto(Kortti* kortti){
                 printf("> ");
                 scanf("%i", &ottoSumma);
                 fflush(stdin);
-                if (ottoSumma == 0){
+                if (ottoSumma <= 0){
                     printf("Syota kunnollinen luku ");
                     voiNostaa = 0;
                 }
@@ -270,7 +272,7 @@ int otto(Kortti* kortti){
         return 0;
     }
     else if (ottoSumma > kortti->kayttoraja){
-        printf("Et voi nostaa yli %i euroa (kortin kayttoraja \n", kortti->kayttoraja);
+        printf("Et voi nostaa yli %i euroa (kortin kayttoraja) \n", kortti->kayttoraja);
         return 0;
     }
     else{
@@ -289,6 +291,7 @@ int otto(Kortti* kortti){
         if (seteliMaara[rahayksMaara - 1] != 0){
             printf("\nAutomaatti ei voi antaa 20 euroa pienempia seteleita, joten %i euron pyynnosta %i euroa jaa tilillesi", ottoSumma, seteliMaara[rahayksMaara - 1]);
             ottoSumma -= seteliMaara[rahayksMaara - 1];
+
         }
 
         kortti->saldo -= ottoSumma;
