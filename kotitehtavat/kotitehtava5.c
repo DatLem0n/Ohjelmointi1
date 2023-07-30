@@ -246,6 +246,10 @@ int otto(Kortti* kortti){
             if(tempSumma >= rahat[i]){
                 seteliMaara[i] = tempSumma / rahat[i];
                 tempSumma = tempSumma % rahat[i];
+                if(tempSumma % 20 != 0 && seteliMaara[0] > 0){
+                    seteliMaara[0] -= 1;
+                    tempSumma += 50;
+                }
             } else seteliMaara[i] = 0;
         }
         if (seteliMaara[rahayksMaara - 1] != 0){

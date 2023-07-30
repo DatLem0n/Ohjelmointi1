@@ -76,7 +76,7 @@ int main() {
  */
 int lueKortti(int tiliNumero, Kortti* kortti){
     FILE * tiliFile;
-    char filename[100], pin[10], kayttoraja[100], saldo[100], tapahtumaMaara[10], tapahtumat[200];
+    char filename[100], pin[10], kayttoraja[100], saldo[100], tapahtumaMaara[100], tapahtumat[200];
     snprintf(filename, 100, "%i", tiliNumero);
     strcat(filename, ".tili");
 
@@ -286,6 +286,10 @@ int otto(Kortti* kortti){
             if(tempSumma >= rahat[i]){
                 seteliMaara[i] = tempSumma / rahat[i];
                 tempSumma = tempSumma % rahat[i];
+                if(tempSumma % 20 != 0 && seteliMaara[0] > 0){
+                    seteliMaara[0] -= 1;
+                    tempSumma += 50;
+                }
             } else seteliMaara[i] = 0;
         }
         if (seteliMaara[rahayksMaara - 1] != 0){
